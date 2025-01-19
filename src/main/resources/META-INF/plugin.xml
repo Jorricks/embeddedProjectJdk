@@ -13,15 +13,10 @@ You can also define OS-dependent <code>.idea/jdk.table.*.xml</code> files like s
   - Linux: <code>jdk.table.lin.xml</code>
   - MacOS: <code>jdk.table.mac.xml</code>
   ]]></description>
-  <resource-bundle>messages</resource-bundle>
   <version>2.0</version>
 
   <extensions defaultExtensionNs="com.intellij">
     <notificationGroup id="Per Project JDK Settings" displayType="BALLOON"/>
     <postStartupActivity implementation="com.jetbrains.embeddedProjectJdk.EmbeddedProjectJdkSettingsChecker" />
   </extensions>
-
-  <actions>
-    <action id="LoadJdkSettingsFromProject" class="com.jetbrains.embeddedProjectJdk.LoadJdkSettingsFromProject" />
-  </actions>
 </idea-plugin>

@@ -7,6 +7,7 @@ import com.intellij.openapi.projectRoots.impl.ProjectJdkImpl
 import com.intellij.openapi.projectRoots.impl.UnknownSdkType
 import com.intellij.openapi.util.JDOMUtil
 import com.intellij.openapi.util.SystemInfo
+import com.intellij.openapi.diagnostic.Logger
 import org.jdom.filter2.ElementFilter
 import java.io.File
 
@@ -16,7 +17,7 @@ object JdkUtil {
     return File(jdkHomePath).exists()
   }
 
-  private fun getJdkTableFile(project: Project): File {
+  fun getJdkTableFile(project: Project): File {
     val ideaFolder = File(project.basePath ?: "").resolve(".idea")
     val allOsFile = ideaFolder.resolve("jdk.table.xml")
     val windowsFile = ideaFolder.resolve("jdk.table.win.xml")
@@ -63,5 +64,21 @@ object JdkUtil {
       jdkList.add(jdk)
     }
     return jdkList
+  }
+
+  fun createFileWithSuffix(project: Project, suffix: String, content: String): File {
+    val originalFile = getJdkTableFile(project)
+    val parentDir = originalFile.parentFile
+    val newFileName = "${originalFile.name}.${suffix}.txt"
+    val newFile = File(parentDir, newFileName)
+    
+    try {
+      newFile.writeText(content)
+    } catch (e: Exception) {
+      val logger = Logger.getInstance(JdkUtil::class.java)
+      logger.error("Failed to write to file: ${newFile.absolutePath}", e)
+      throw e
+    }
+    return newFile
   }
 }
